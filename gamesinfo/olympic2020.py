@@ -43,4 +43,7 @@ def show_info(mid):
 
         if match_info["period"] == "已结束":
             break
-        time.sleep(25)
+        if match_info["period"] == "比赛前":
+            time.sleep(90)
+        else:
+            time.sleep(25)
