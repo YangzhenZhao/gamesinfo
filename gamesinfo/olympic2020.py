@@ -1,10 +1,39 @@
 import json
 import time
+from datetime import datetime
 
 import requests
 from prettytable import PrettyTable
 
 from gamesinfo.const import CUSTOM_HEADER
+
+
+def game_list_show():
+    date = datetime.now().strftime("%Y-%m-%d")
+    url = (
+        "https://app.sports.qq.com/match/list"
+        f"?columnId=130002&dateNum=1&flag=2&date={date}"
+    )
+    text = requests.get(url, headers=CUSTOM_HEADER).text
+    info = json.loads(text)
+    if info["code"] != 0:
+        print("暂无数据!")
+        return
+    match_list = info["data"]["matches"][date]["list"]
+    table = PrettyTable()
+    table.field_names = ["赛事", "ID"]
+    for match in match_list:
+        if "matchInfo" not in match:
+            continue
+        match_info = match["matchInfo"]
+        is_live = match_info["livePeriod"] == "1"
+        if not is_live:
+            continue
+        match_name = match_info["matchDesc"]
+        match_id = match_info["mid"]
+        match_id = match_id[match_id.find(":") + 1 :]
+        table.add_row([match_name, match_id])
+    print(table.get_string())
 
 
 def show_info(mid):
@@ -14,7 +43,7 @@ def show_info(mid):
     last_version = ""
     while True:
         text = requests.get(
-            f"https://app.sports.qq.com/TokyoOly/statDetail?mid={mid}",
+            f"https://app.sports.qq.com/TokyoOly/statDetail?mid=130000:{mid}",
             headers=CUSTOM_HEADER,
         ).text
         info = json.loads(text)
