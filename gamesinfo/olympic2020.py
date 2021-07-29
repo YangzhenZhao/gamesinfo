@@ -21,7 +21,7 @@ def game_list_show():
         return
     match_list = info["data"]["matches"][date]["list"]
     table = PrettyTable()
-    table.field_names = ["赛事", "ID"]
+    table.field_names = ["开始时间", "赛事", "ID"]
     for match in match_list:
         if "matchInfo" not in match:
             continue
@@ -32,7 +32,9 @@ def game_list_show():
         match_name = match_info["matchDesc"]
         match_id = match_info["mid"]
         match_id = match_id[match_id.find(":") + 1 :]
-        table.add_row([match_name, match_id])
+        start_time = match_info["startTime"]
+        start_time = start_time[start_time.find(" ") + 1 :]
+        table.add_row([start_time, match_name, match_id])
     print(table.get_string())
 
 
