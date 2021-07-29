@@ -8,8 +8,9 @@ from prettytable import PrettyTable
 from gamesinfo.const import CUSTOM_HEADER
 
 
-def game_list_show():
-    date = datetime.now().strftime("%Y-%m-%d")
+def game_list_show(date=None):
+    if date is None:
+        date = datetime.now().strftime("%Y-%m-%d")
     url = (
         "https://app.sports.qq.com/match/list"
         f"?columnId=130002&dateNum=1&flag=2&date={date}"
@@ -26,7 +27,7 @@ def game_list_show():
         if "matchInfo" not in match:
             continue
         match_info = match["matchInfo"]
-        is_live = match_info["livePeriod"] == "1"
+        is_live = match_info["livePeriod"] != "2"
         if not is_live:
             continue
         match_name = match_info["matchDesc"]
