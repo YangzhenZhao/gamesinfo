@@ -8,7 +8,7 @@ from prettytable import PrettyTable
 from gamesinfo.const import CUSTOM_HEADER
 
 
-def game_list_show(date=None):
+def game_list_show(date=None, is_finish=False):
     if date is None:
         date = datetime.now().strftime("%Y-%m-%d")
     url = (
@@ -27,8 +27,11 @@ def game_list_show(date=None):
         if "matchInfo" not in match:
             continue
         match_info = match["matchInfo"]
-        is_live = match_info["livePeriod"] != "2"
-        if not is_live:
+        if not is_finish:
+            is_show = match_info["livePeriod"] != "2"
+        else:
+            is_show = match_info["livePeriod"] == "2"
+        if not is_show:
             continue
         match_name = match_info["matchDesc"]
         match_id = match_info["mid"]
