@@ -55,7 +55,7 @@ def show_info(mid):
         info = json.loads(text)
         version = info["version"]
         if version == last_version:
-            time.sleep(10)
+            time.sleep(5)
         last_version = version
         if info["code"] != 0:
             print("暂无数据!")
@@ -81,4 +81,4 @@ def show_info(mid):
         if match_info["period"] == "比赛前":
             time.sleep(90)
         else:
-            time.sleep(25)
+            time.sleep(8)
